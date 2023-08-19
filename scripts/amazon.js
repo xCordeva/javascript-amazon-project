@@ -1,4 +1,9 @@
+import {cart, addToCart} from '../data/cart.js';
+import { products } from '../data/products.js';
+
+
 let productsHTML= '';
+
 products.forEach((product)=>{
     productsHTML += `
         <div class="product-container">
@@ -50,8 +55,34 @@ products.forEach((product)=>{
             </button>
         </div>`
 })
-document.querySelector('.js-product-grid').innerHTML= productsHTML;
+
+const storedCartQuantity = parseInt(localStorage.getItem('cartQuantityNum'))
+document.querySelector('.js-cart-quantity').innerHTML = storedCartQuantity;
+
+function updateCartQuantity(){
+    let currentQuantity = storedCartQuantity
+        cart.forEach((item)=>{
+            currentQuantity+= item.quantity
+        })
+        localStorage.setItem('cartQuantityNum', currentQuantity)
+        document.querySelector('.js-cart-quantity').innerHTML = currentQuantity;
+}
+
+function startIconTimeout(addedIcon){
+    clearTimeout(addedIconTimeId)
+    addedIcon.style.opacity = '1';
+    addedIconTimeId = setTimeout(()=>{
+        addedIcon.style.opacity = '0';
+        
+    }, 1000)
+} 
+
 let addedIconTimeId;
+
+
+
+document.querySelector('.js-product-grid').innerHTML= productsHTML;
+
 document.querySelectorAll('.js-add-cart').forEach((button)=>{
     button.addEventListener('click', ()=>{
         
@@ -59,39 +90,11 @@ document.querySelectorAll('.js-add-cart').forEach((button)=>{
         const addedIcon = document.querySelector(`.js-added-${productId}`);
         addedIcon.style.opacity = '1';
         
-        function startIconTimeout(){
-            clearTimeout(addedIconTimeId)
-            addedIcon.style.opacity = '1';
-            addedIconTimeId = setTimeout(()=>{
-                addedIcon.style.opacity = '0';
-                
-            }, 2000)
-        } 
-        startIconTimeout()
-        
-        let matchingItem;
-        const quantitySelect  = document.querySelector(`.js-quantity-selector-${productId}`);
-        let quantity = Number(quantitySelect.value);
-        cart.forEach((item)=>{
-            if(productId === item.productId){
-                matchingItem = item;
-            }
-        }) 
-        if (matchingItem){
-            matchingItem.quantity += quantity
-        }else {
-            cart.push({
-                productId,
-                quantity
-            })
-        }
-        let cartQuantity=0;
-        cart.forEach((item)=>{
-            cartQuantity+= item.quantity
-        })
-        document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
+        startIconTimeout(addedIcon)
 
-        console.log(addedIcon)
+        addToCart(productId)
+        
+        updateCartQuantity()
     })
 })
 
