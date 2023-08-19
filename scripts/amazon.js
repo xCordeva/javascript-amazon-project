@@ -56,16 +56,19 @@ products.forEach((product)=>{
         </div>`
 })
 
-const storedCartQuantity = parseInt(localStorage.getItem('cartQuantityNum'))
-document.querySelector('.js-cart-quantity').innerHTML = storedCartQuantity;
+/**let storedCartQuantity = JSON.parse(localStorage.getItem('cartQuantityNum'))
+document.querySelector('.js-cart-quantity').innerHTML = storedCartQuantity;*/
 
 function updateCartQuantity(){
-    let currentQuantity = storedCartQuantity
+    let currentQuantity = 0
         cart.forEach((item)=>{
             currentQuantity+= item.quantity
         })
-        localStorage.setItem('cartQuantityNum', currentQuantity)
+
+        //localStorage.setItem('cartQuantityNum', currentQuantity)
+        
         document.querySelector('.js-cart-quantity').innerHTML = currentQuantity;
+        
 }
 
 function startIconTimeout(addedIcon){
@@ -95,6 +98,7 @@ document.querySelectorAll('.js-add-cart').forEach((button)=>{
         addToCart(productId)
         
         updateCartQuantity()
+        console.log(cart)
     })
 })
 
