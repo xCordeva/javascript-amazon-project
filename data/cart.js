@@ -5,7 +5,6 @@ if(!cart){
 
 function saveToStorage(){
     localStorage.setItem('cart', JSON.stringify(cart))
-    localStorage.setItem('cartNum', JSON.stringify(cart.quantity))
 }
 
 export function removeFromCart(productId) {
@@ -26,7 +25,21 @@ export function checkQuantity(){
         totalCartQuantity+= item.quantity        
     });
     localStorage.setItem('cartNum', totalCartQuantity);
+    
     return totalCartQuantity
+    
+}
+
+export function updateQuantityBySave(productId, newQuantityValue){
+    let matchingItems;
+    cart.forEach((item)=>{
+        if(item.productId === productId){
+            matchingItems = item;
+        }
+        
+    })
+    matchingItems.quantity = newQuantityValue
+    saveToStorage()
 }
 
 

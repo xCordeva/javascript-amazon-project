@@ -42,6 +42,19 @@
   }
 }
 
+/* HERE*/
+
+.alt-quantity, .save-quantity-link{
+  width: 30px;
+  display: none;
+}
+.js-update-button{
+  display: inline;
+}
+.js-quantity-span{
+  display: inline;
+}
+
 .cart-item-container,
 .payment-summary {
   border: 1px solid rgb(222, 222, 222);
