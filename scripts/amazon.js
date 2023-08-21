@@ -1,4 +1,4 @@
-import {cart, addToCart} from '../data/cart.js';
+import {cart, addToCart,checkQuantity} from '../data/cart.js';
 import { products } from '../data/products.js';
 
 
@@ -55,21 +55,16 @@ products.forEach((product)=>{
             </button>
         </div>`
 })
-
-/**let storedCartQuantity = JSON.parse(localStorage.getItem('cartQuantityNum'))
-document.querySelector('.js-cart-quantity').innerHTML = storedCartQuantity;*/
+let storedQuantity = parseInt(localStorage.getItem('cartNum'))
+document.querySelector('.js-cart-quantity').innerHTML = storedQuantity;
 
 function updateCartQuantity(){
-    let currentQuantity = 0
-        cart.forEach((item)=>{
-            currentQuantity+= item.quantity
-        })
-
-        //localStorage.setItem('cartQuantityNum', currentQuantity)
-        
-        document.querySelector('.js-cart-quantity').innerHTML = currentQuantity;
-        
+    storedQuantity = checkQuantity()
+    document.querySelector('.js-cart-quantity').innerHTML = storedQuantity;
 }
+
+
+
 
 function startIconTimeout(addedIcon){
     clearTimeout(addedIconTimeId)
