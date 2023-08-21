@@ -39,7 +39,7 @@ cart.forEach((cartItem)=>{
                 <span class="update-quantity-link link-primary js-update-button js-update-button-${matchingItem.id}" data-product-id="${matchingItem.id}">
                     Update
                 </span>
-                <input class= "alt-quantity js-quantity-button-${matchingItem.id}" type="number" id="quantity" name="quantity" min="1" max="10" onkeydown="">
+                <input class= "alt-quantity js-quantity-button-${matchingItem.id}" type="number" id="quantity" name="quantity" min="1" max="10">
                 <span class="save-quantity-link link-primary js-save-button-${matchingItem.id}">
                     Save
                 </span>
@@ -125,7 +125,12 @@ document.querySelectorAll('.js-update-button').forEach((link)=>{
 
 
         saveButton.addEventListener('click', ()=>{
+            
             const newQuantityValue = Number(newQuantity.value)
+            if (newQuantityValue <=0){
+                alert('Quantity is not Valid, please choose a number above 0');
+                return;
+            }
             updateQuantityBySave(productId, newQuantityValue)
             quantitySpan.innerHTML = `${newQuantityValue}`
             updateButton.style.display = 'inline';
