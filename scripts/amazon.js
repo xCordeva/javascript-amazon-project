@@ -55,6 +55,7 @@ products.forEach((product)=>{
             </button>
         </div>`
 })
+
 let storedQuantity = parseInt(localStorage.getItem('cartNum'))
 document.querySelector('.js-cart-quantity').innerHTML = storedQuantity;
 
@@ -90,7 +91,6 @@ document.querySelectorAll('.js-add-cart').forEach((button)=>{
         const {productId} = button.dataset;
         const addedIcon = document.querySelector(`.js-added-${productId}`);
         addedIcon.style.opacity = '1';
-        
         startIconTimeout(addedIcon)
 
         addToCart(productId)
