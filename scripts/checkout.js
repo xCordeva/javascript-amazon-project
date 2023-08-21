@@ -118,7 +118,6 @@ document.querySelectorAll('.js-update-button').forEach((link)=>{
         const newQuantity = document.querySelector(`.js-quantity-button-${productId}`)
         const updateButton = document.querySelector(`.js-update-button-${productId}`)
         const quantitySpan = document.querySelector(`.js-quantity-span-${productId}`)
-        console.log(saveButton)
         updateButton.style.display = 'none';
         quantitySpan.style.display = 'none';
         saveButton.style.display = 'inline';
@@ -128,33 +127,28 @@ document.querySelectorAll('.js-update-button').forEach((link)=>{
         saveButton.addEventListener('click', ()=>{
             const newQuantityValue = Number(newQuantity.value)
             updateQuantityBySave(productId, newQuantityValue)
-            
             quantitySpan.innerHTML = `${newQuantityValue}`
             updateButton.style.display = 'inline';
             quantitySpan.style.display = 'inline';
             saveButton.style.display = 'none';
             newQuantity.style.display = 'none';
         })
-
-        /*document.querySelector('.quantity-label').innerHTML = ``
-        let storedValue='';
-        const updatedQuantity = document.querySelector('.alt-quantity')
-        storedValue = updatedQuantity.value
-        console.log(updatedQuantity.value)   */     
-
+        const handleEnterKey = (event) => {
+            if (event.key === 'Enter') {
+                const newQuantityValue = Number(newQuantity.value);
+                updateQuantityBySave(productId, newQuantityValue);
+                quantitySpan.innerHTML = `${newQuantityValue}`;
+                updateButton.style.display = 'inline';
+                quantitySpan.style.display = 'inline';
+                saveButton.style.display = 'none';
+                newQuantity.style.display = 'none';
+                document.removeEventListener('keydown', handleEnterKey);
+            }
+        };
+        document.addEventListener('keydown', handleEnterKey);
     })
     
 })
-/*
-function updatingViaEnter(event){
-    if(event.key === 'Enter'){
-        let storedValue='';
-        const updatedQuantity = document.querySelector('.alt-quantity')
-        storedValue = updatedQuantity.value
-        console.log(updatedQuantity.value)
-    } 
-}*/
     
 const totalCartQuantity = checkQuantity()
 document.querySelector('.return-to-home-link').innerHTML= `${totalCartQuantity} items`
-
