@@ -97,17 +97,24 @@ cart.forEach((cartItem)=>{
         </div>
     `
 })
-
-document.querySelector('.order-summary').innerHTML= checkoutHTML
-document.querySelectorAll(`.js-delete-button`)
-    .forEach((link) => {
-        link.addEventListener('click', ()=>{
-            const {productId} = link.dataset
-            removeFromCart(productId)
-            const container = document.querySelector(`.js-container-${productId}`)
-            container.remove()
+if (cart.length !=0){
+    document.querySelector('.order-summary').innerHTML= checkoutHTML
+    document.querySelectorAll(`.js-delete-button`)
+        .forEach((link) => {
+            link.addEventListener('click', ()=>{
+                const {productId} = link.dataset
+                removeFromCart(productId)
+                const container = document.querySelector(`.js-container-${productId}`)
+                container.remove()
+            })
         })
-    })
+}else{
+    emptyCartMessage()
+}
+function emptyCartMessage(){
+    const emptyCart = document.querySelector('.js-cart-empty')
+    emptyCart.style.display = 'block';
+}
 
 
 
@@ -157,3 +164,4 @@ document.querySelectorAll('.js-update-button').forEach((link)=>{
     
 const totalCartQuantity = checkQuantity()
 document.querySelector('.return-to-home-link').innerHTML= `${totalCartQuantity} items`
+document.querySelector('.js-order-summary-items').innerHTML= totalCartQuantity
