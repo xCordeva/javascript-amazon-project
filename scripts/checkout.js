@@ -1,5 +1,6 @@
 import { products } from "../data/products.js";
-import { cart, removeFromCart } from "../data/cart.js";
+import { cart, removeFromCart, checkQuantity } from "../data/cart.js";
+
 
 let checkoutHTML ='';
 
@@ -103,3 +104,11 @@ document.querySelectorAll(`.js-delete-button`)
             container.remove()
         })
     })
+
+
+
+
+    
+const totalCartQuantity = checkQuantity()
+document.querySelector('.return-to-home-link').innerHTML= `${totalCartQuantity} items`
+

@@ -58,9 +58,12 @@ products.forEach((product)=>{
 let storedQuantity = parseInt(localStorage.getItem('cartNum'))
 document.querySelector('.js-cart-quantity').innerHTML = storedQuantity;
 
-function updateCartQuantity(){
+
+
+export function updateCartQuantity(){
     storedQuantity = checkQuantity()
     document.querySelector('.js-cart-quantity').innerHTML = storedQuantity;
+    return storedQuantity;
 }
 
 
