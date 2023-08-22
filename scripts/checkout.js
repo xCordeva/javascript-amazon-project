@@ -1,5 +1,5 @@
 import { products } from "../data/products.js";
-import { cart, removeFromCart, checkQuantity,updateQuantityBySave } from "../data/cart.js";
+import { cart, removeFromCart, checkQuantity,updateQuantityBySave, checkCartPrice } from "../data/cart.js";
 
 
 let checkoutHTML ='';
@@ -13,7 +13,7 @@ cart.forEach((cartItem)=>{
             matchingItem = product
         }
     })
-    
+    checkCartPrice()
 
     checkoutHTML+= `
         <div class="cart-item-container js-container-${matchingItem.id}">
@@ -165,3 +165,5 @@ document.querySelectorAll('.js-update-button').forEach((link)=>{
 const totalCartQuantity = checkQuantity()
 document.querySelector('.return-to-home-link').innerHTML= `${totalCartQuantity} items`
 document.querySelector('.js-order-summary-items').innerHTML= totalCartQuantity
+const totalCartPrice = checkCartPrice()
+document.querySelector('.js-items-price').innerHTML = `$${totalCartPrice}`

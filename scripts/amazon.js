@@ -1,4 +1,4 @@
-import {cart, addToCart,checkQuantity} from '../data/cart.js';
+import {cart, addToCart,checkQuantity,checkCartPrice} from '../data/cart.js';
 import { products } from '../data/products.js';
 
 
@@ -94,9 +94,8 @@ document.querySelectorAll('.js-add-cart').forEach((button)=>{
         startIconTimeout(addedIcon)
 
         addToCart(productId)
-        
         updateCartQuantity()
-        console.log(cart)
+        checkCartPrice(productId)
     })
 })
 
