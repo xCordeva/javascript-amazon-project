@@ -40,10 +40,10 @@ export function checkCartPrice(){
         const matchingItem = products.find((product) => productId === product.id);
         if (matchingItem)
             {
-                totalCartPrice+= matchingItem.priceCents /100
+                totalCartPrice+= matchingItem.priceCents*item.quantity /100
             }
         });
-        return totalCartPrice;
+        return totalCartPrice.toFixed(2);
     }
     
   
