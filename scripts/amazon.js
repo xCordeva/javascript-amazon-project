@@ -98,4 +98,3 @@ document.querySelectorAll('.js-add-cart').forEach((button)=>{
         checkCartPrice(productId)
     })
 })
-
