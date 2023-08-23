@@ -18,8 +18,7 @@ export function removeFromCart(productId) {
     })
     cart = newCart;
     saveToStorage();
-    checkQuantity()
-    
+    checkQuantity();    
 }
 
 export function checkQuantity(){
@@ -30,7 +29,6 @@ export function checkQuantity(){
     localStorage.setItem('cartNum', totalCartQuantity);
     
     return totalCartQuantity
-    
 }
 
 export function checkCartPrice(){
@@ -46,7 +44,11 @@ export function checkCartPrice(){
         return totalCartPrice.toFixed(2);
     }
     
-  
+
+
+
+
+
 
 export function updateQuantityBySave(productId, newQuantityValue){
     let matchingItems;

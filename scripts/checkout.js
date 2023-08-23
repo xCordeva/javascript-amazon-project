@@ -14,7 +14,7 @@ cart.forEach((cartItem)=>{
         }
     })
     checkCartPrice()
-
+    
     checkoutHTML+= `
         <div class="cart-item-container js-container-${matchingItem.id}">
             <div class="delivery-date">
@@ -55,8 +55,11 @@ cart.forEach((cartItem)=>{
                 </div>
                 <div class="delivery-option">
                 <input type="radio" checked
+                    name="delivery-option-${matchingItem.id}"
                     class="delivery-option-input"
-                    name="delivery-option-${matchingItem.id}">
+                    id="option1-${matchingItem.id}"
+                    data-shipping-cost="0"
+                    data-product-id="${matchingItem.id}">
                 <div>
                     <div class="delivery-option-date">
                     Tuesday, June 21
@@ -68,8 +71,11 @@ cart.forEach((cartItem)=>{
                 </div>
                 <div class="delivery-option">
                 <input type="radio"
+                    name="delivery-option-${matchingItem.id}"
                     class="delivery-option-input"
-                    name="delivery-option-${matchingItem.id}">
+                    id="option2-${matchingItem.id}"
+                    data-shipping-cost="499"
+                    data-product-id="${matchingItem.id}">
                 <div>
                     <div class="delivery-option-date">
                     Wednesday, June 15
@@ -81,8 +87,11 @@ cart.forEach((cartItem)=>{
                 </div>
                 <div class="delivery-option">
                 <input type="radio"
+                    name="delivery-option-${matchingItem.id}"
                     class="delivery-option-input"
-                    name="delivery-option-${matchingItem.id}">
+                    id="option3-${matchingItem.id}"
+                    data-shipping-cost="999"
+                    data-product-id="${matchingItem.id}">
                 <div>
                     <div class="delivery-option-date">
                     Monday, June 13
@@ -95,27 +104,123 @@ cart.forEach((cartItem)=>{
             </div>
             </div>
         </div>
-    `
+    `    
 })
+
+
+/*function to check & return the last item in an array  */
+function isLastItem(arr, item){
+    const lastIndex = arr.length - 1;
+    return arr.indexOf(item) === lastIndex
+}
+
 if (cart.length !=0){
-    document.querySelector('.order-summary').innerHTML= checkoutHTML
+    document.querySelector('.order-summary-cart-items').innerHTML= checkoutHTML
     document.querySelectorAll(`.js-delete-button`)
         .forEach((link) => {
-            link.addEventListener('click', ()=>{
+            link.addEventListener('click', (item)=>{
                 const {productId} = link.dataset
                 removeFromCart(productId)
                 const container = document.querySelector(`.js-container-${productId}`)
                 container.remove()
-            })
-        })
+                updatingPage()
+                removeShippingCost(productId)
+                /*checking if its the last item on the cart to display the message after removing it*/
+                if(isLastItem(cart, item)){
+                    emptyCartMessage()
+                    updatingPage()
+                }
+
+            });
+        });
 }else{
     emptyCartMessage()
 }
+
 function emptyCartMessage(){
     const emptyCart = document.querySelector('.js-cart-empty')
     emptyCart.style.display = 'block';
 }
 
+
+const shippingCosts = {};
+
+/* function to remove the shipping cost when removing an item from cart*/
+function removeShippingCost(productId) {
+    const storedShippingCost = shippingCosts[productId] || 0; // Get the stored shipping cost
+    const totalShipping = parseInt(localStorage.getItem('shipping')) || 0;
+
+    // Update the total shipping by subtracting the stored shipping cost
+    const newTotalShipping = totalShipping - storedShippingCost;
+    localStorage.setItem('shipping', newTotalShipping);
+    document.querySelector('.js-shipping-price').innerHTML = `$${newTotalShipping / 100}`;
+    // Remove the shipping cost entry for the product
+    delete shippingCosts[productId];
+    //delete the stored radio option
+    localStorage.removeItem(`selected-${productId}`)
+}
+
+
+document.querySelectorAll('.delivery-option-input').forEach((input) => {
+    input.addEventListener('change', () => {
+        let { productId } = input.dataset;
+        cart.forEach((item)=>{
+            if(item.productId === productId){
+                
+                const shippingCost = parseInt(input.getAttribute('data-shipping-cost'), 10);
+        
+                if (input.checked) {
+                    
+                    if (shippingCosts[productId] !== shippingCost) {  // Check if the option has changed
+                        const previousShippingCost = shippingCosts[productId] || 0;  // Get the previous cost
+                        shippingCosts[productId] = shippingCost;
+        
+                        let totalShipping = parseInt(localStorage.getItem('shipping')) || 0;
+                        totalShipping = totalShipping - previousShippingCost + shippingCost;
+                        
+                        document.querySelector('.js-shipping-price').innerHTML = `$${totalShipping / 100}`;
+                        localStorage.setItem('shipping', totalShipping);
+                        localStorage.setItem(`selected-${productId}`, input.id);
+
+                        taxlessCalculationDsiplay()
+                        taxCalculationDsiplay()
+                        totalCost()
+                    }
+                } 
+            }
+            
+        })
+        
+    });
+});
+
+/* function to calculate and show the total without tax*/
+function taxlessCalculationDsiplay(){
+    const totalCartPrice = checkCartPrice()
+    const shippingValue = localStorage.getItem('shipping');
+    const formattedShippingValue = parseFloat(shippingValue) / 100;    
+    const totalPriceWithShipping = (formattedShippingValue + parseFloat(totalCartPrice)).toFixed(2);
+    document.querySelector('.js-total-before-tax').innerHTML = `$${totalPriceWithShipping}`
+}
+
+/* function to calculate and show the total including tax*/
+function taxCalculationDsiplay(){
+    const totalCartPrice = checkCartPrice()
+    const shippingValue = localStorage.getItem('shipping');
+    const formattedShippingValue = parseFloat(shippingValue) / 100;    
+    const totalPriceWithShipping = (formattedShippingValue + parseFloat(totalCartPrice)).toFixed(2);
+    const totalTax = (totalPriceWithShipping *0.1).toFixed(2)
+    document.querySelector('.js-total-after-tax').innerHTML = `$${totalTax}`
+}
+/* function to calculate and show the order's total cost*/
+function totalCost(){
+    const totalCartPrice = checkCartPrice()
+    const shippingValue = localStorage.getItem('shipping');
+    const formattedShippingValue = parseFloat(shippingValue) / 100;    
+    const totalPriceWithShipping = (formattedShippingValue + parseFloat(totalCartPrice)).toFixed(2);
+    const totalTax = (totalPriceWithShipping *0.1).toFixed(2)
+    document.querySelector('.js-total-order-cost').innerHTML = `$${(Number(totalTax) + Number(totalPriceWithShipping)).toFixed(2)}`
+}
 
 
 document.querySelectorAll('.js-update-button').forEach((link)=>{
@@ -129,7 +234,7 @@ document.querySelectorAll('.js-update-button').forEach((link)=>{
         quantitySpan.style.display = 'none';
         saveButton.style.display = 'inline';
         newQuantity.style.display = 'inline';
-
+        
 
         saveButton.addEventListener('click', ()=>{
             
@@ -144,6 +249,8 @@ document.querySelectorAll('.js-update-button').forEach((link)=>{
             quantitySpan.style.display = 'inline';
             saveButton.style.display = 'none';
             newQuantity.style.display = 'none';
+                       
+            updatingPage()
         })
         const handleEnterKey = (event) => {
             if (event.key === 'Enter') {
@@ -155,15 +262,42 @@ document.querySelectorAll('.js-update-button').forEach((link)=>{
                 saveButton.style.display = 'none';
                 newQuantity.style.display = 'none';
                 document.removeEventListener('keydown', handleEnterKey);
+                
+                updatingPage()
             }
         };
         document.addEventListener('keydown', handleEnterKey);
     })
     
 })
+
+/*function to update the page immediatly after actions*/
+function updatingPage(){
+    const totalCartQuantity = checkQuantity()
+    document.querySelector('.return-to-home-link').innerHTML= `${totalCartQuantity} items`
+    document.querySelector('.js-order-summary-items').innerHTML= totalCartQuantity
+    const totalCartPrice = checkCartPrice()
+    document.querySelector('.js-items-price').innerHTML = `$${totalCartPrice}`
+
+    document.querySelector('.js-shipping-price').innerHTML = `$${localStorage.getItem('shipping') /100}`
+
+    taxlessCalculationDsiplay()
+    taxCalculationDsiplay()
+    totalCost()
     
-const totalCartQuantity = checkQuantity()
-document.querySelector('.return-to-home-link').innerHTML= `${totalCartQuantity} items`
-document.querySelector('.js-order-summary-items').innerHTML= totalCartQuantity
-const totalCartPrice = checkCartPrice()
-document.querySelector('.js-items-price').innerHTML = `$${totalCartPrice}`
+/* restoring the saved radio option*/
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.delivery-option-input').forEach((input) => {
+            const { productId } = input.dataset;
+            const storedOptionId = localStorage.getItem(`selected-${productId}`);
+            
+            if (storedOptionId === input.id) {
+                input.checked = true;
+                const storedShippingCost = parseInt(input.getAttribute('data-shipping-cost'), 10);
+                shippingCosts[productId]= storedShippingCost
+            }
+        });
+    });
+}
+
+updatingPage()
