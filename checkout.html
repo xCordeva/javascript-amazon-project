@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/dd38228dda.js" crossorigin="anonymous"></script>
 
     <!-- Here are the CSS files for this page. -->
     <link rel="stylesheet" href="styles/shared/general.css">
@@ -78,12 +79,31 @@
 
           <div class="payment-summary-row total-row">
             <div>Order total:</div>
+            
             <div class="payment-summary-money js-total-order-cost">$0</div>
+            <div class="paypal-option">
+              <p>Use PayPal</p>
+              <input type="checkbox" class="paypal-checkbox">
+            </div>
           </div>
 
           <button class="place-order-button button-primary">
             Place your order
           </button>
+          <div class="payment-options">
+            <button class="paypal-order-button button-primary">
+              <img src="images/download.svg" alt="PayPal">
+            </button>
+            <button class="credit-order-button button-primary">
+              <i class="fa-regular fa-credit-card" style="color: #bbbbbb; font-size: 1.1em; padding-right: 5px;"></i><span>Debit or Credit Card</span> 
+            </button>
+            <div class="powered-by">
+              <p>Powered by</p>
+              <img src="images/download.svg" class="powered-by-paypal">
+              
+            </div>
+            
+          </div>
         </div>
       </div>
     </div>
