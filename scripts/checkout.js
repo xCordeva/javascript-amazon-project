@@ -271,6 +271,25 @@ document.querySelectorAll('.js-update-button').forEach((link)=>{
     
 })
 
+
+
+const checkBoxButton = document.querySelector('.paypal-checkbox')
+const placeOrderButton = document.querySelector('.place-order-button')
+const paymentOptionsSection = document.querySelector('.payment-options')
+
+checkBoxButton.addEventListener('click', ()=>{
+    if(checkBoxButton.checked){
+        paymentOptionsSection.style.display = 'inline';
+        placeOrderButton.style.display = 'none';
+    }else{
+        paymentOptionsSection.style.display = 'none';
+        placeOrderButton.style.display = 'inline';
+    }
+    
+})
+
+
+
 /*function to update the page immediatly after actions*/
 function updatingPage(){
     const totalCartQuantity = checkQuantity()

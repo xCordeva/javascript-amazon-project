@@ -41,6 +41,61 @@
     grid-template-columns: 1fr;
   }
 }
+/*Form styling I did this before finding out it was actually an api to the real paypal so I didnt have to do all this ! :( */
+
+#credit-info .full-width{
+  border: 1px solid hsl(0, 0%, 59%);
+  border-radius: 5px;
+  height: 48px;
+  overflow: hidden;
+  position: relative;
+  white-space: nowrap;
+  margin: 10px 0;
+}
+#credit-info .full-width-input{
+
+  box-sizing: border-box;
+  font-size: 16px;
+  outline: 0px;
+  width: 100%;
+  border-style: none;
+  height: 46px;
+  padding: 16px 15px 0px;
+}
+#credit-info .full-width:active{
+  border: 2px solid hsl(221, 100%, 32%);
+}
+
+#credit-info .half-width-container {
+  display: flex; 
+  justify-content: space-between; 
+}
+
+#credit-info .half-width {
+  flex: 0 0 calc(50% - 5px); /* Adjust spacing */
+  border: 1px solid hsl(0, 0%, 59%);
+  border-radius: 5px;
+  height: 48px;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+
+#credit-info .half-width-input {
+  border-color: rgb(210, 0, 0);
+  box-sizing: border-box;
+  font-size: 16px;
+  outline: none;
+  width: 100%;
+  border-style: none;
+  height: 46px;
+  padding: 16px 15px 0px;
+}
+
+/*Form styling I did this before finding out it was actually an api to the real paypal so I didnt have to do all this ! :( */
+
+
+
 
 /* HERE*/
 .paypal-option{
@@ -62,7 +117,7 @@
   margin-left: 20px;
 }
 .payment-options{ 
-  display: none
+  display: none;
 }
 .payment-options .paypal-order-button{
   height: 45px;
@@ -314,7 +369,7 @@
   padding-top: 12px;
   padding-bottom: 12px;
   border-radius: 8px;
-
+  display: inline;
   margin-top: 11px;
   margin-bottom: 15px;
 }

@@ -91,18 +91,30 @@
             Place your order
           </button>
           <div class="payment-options">
-            <button class="paypal-order-button button-primary">
-              <img src="images/download.svg" alt="PayPal">
-            </button>
+            <a href="https://www.paypal.com" target="_blank"><button class="paypal-order-button button-primary"> 
+              <img src="images/download.svg" alt="PayPal" >
+            </button></a>
             <button class="credit-order-button button-primary">
               <i class="fa-regular fa-credit-card" style="color: #bbbbbb; font-size: 1.1em; padding-right: 5px;"></i><span>Debit or Credit Card</span> 
             </button>
+            <form id="credit-info">
+              <div class="full-width">
+                <input class="full-width-input" type="tel" placeholder="Card number" autocomplete="cc-number" maxlength="19" minlength="19" required="">
+              </div>
+              <div class="half-width-container">
+                <div class="half-width">
+                  <input class="half-width-input" type="tel" placeholder="Expires" autocomplete="cc-number" maxlength="19" minlength="19" required="">
+                </div>
+                <div class="half-width">
+                  <input class="half-width-input" type="tel"  placeholder="CSC" autocomplete="cc-number" required="" maxlength="3" minlength="3">
+                </div>
+              </div>
+              
+            </form>
             <div class="powered-by">
               <p>Powered by</p>
               <img src="images/download.svg" class="powered-by-paypal">
-              
             </div>
-            
           </div>
         </div>
       </div>
