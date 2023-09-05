@@ -59,7 +59,8 @@ cart.forEach((cartItem)=>{
                     class="delivery-option-input"
                     id="option1-${matchingItem.id}"
                     data-shipping-cost="0"
-                    data-product-id="${matchingItem.id}">
+                    data-product-id="${matchingItem.id}"
+                    data-delivery-date="Tuesday, June 21">
                 <div>
                     <div class="delivery-option-date">
                     Tuesday, June 21
@@ -75,7 +76,8 @@ cart.forEach((cartItem)=>{
                     class="delivery-option-input"
                     id="option2-${matchingItem.id}"
                     data-shipping-cost="499"
-                    data-product-id="${matchingItem.id}">
+                    data-product-id="${matchingItem.id}"
+                    data-delivery-date="Wednesday, June 15">
                 <div>
                     <div class="delivery-option-date">
                     Wednesday, June 15
@@ -91,7 +93,8 @@ cart.forEach((cartItem)=>{
                     class="delivery-option-input"
                     id="option3-${matchingItem.id}"
                     data-shipping-cost="999"
-                    data-product-id="${matchingItem.id}">
+                    data-product-id="${matchingItem.id}"
+                    data-delivery-date="Monday, June 13">
                 <div>
                     <div class="delivery-option-date">
                     Monday, June 13
@@ -168,7 +171,8 @@ document.querySelectorAll('.delivery-option-input').forEach((input) => {
             if(item.productId === productId){
                 
                 const shippingCost = parseInt(input.getAttribute('data-shipping-cost'), 10);
-        
+                
+
                 if (input.checked) {
                     
                     if (shippingCosts[productId] !== shippingCost) {  // Check if the option has changed
@@ -181,7 +185,8 @@ document.querySelectorAll('.delivery-option-input').forEach((input) => {
                         document.querySelector('.js-shipping-price').innerHTML = `$${totalShipping / 100}`;
                         localStorage.setItem('shipping', totalShipping);
                         localStorage.setItem(`selected-${productId}`, input.id);
-
+                        
+                        changeDeliveryDate(input)
                         taxlessCalculationDsiplay()
                         taxCalculationDsiplay()
                         totalCost()
@@ -193,6 +198,20 @@ document.querySelectorAll('.delivery-option-input').forEach((input) => {
         
     });
 });
+
+// function to change the delivery date text for each item
+function changeDeliveryDate(input){
+    const deliveryDay = input.getAttribute('data-delivery-date')
+    const parentContainer = input.closest('.cart-item-container');
+    if(parentContainer){
+        const deliveryDateElement = parentContainer.querySelector('.delivery-date')
+        if(deliveryDateElement){
+            deliveryDateElement.innerHTML = `Delivery date: ${deliveryDay}`
+        }
+    }
+}
+
+
 
 /* function to calculate and show the total without tax*/
 function taxlessCalculationDsiplay(){
@@ -314,7 +333,9 @@ function updatingPage(){
                 input.checked = true;
                 const storedShippingCost = parseInt(input.getAttribute('data-shipping-cost'), 10);
                 shippingCosts[productId]= storedShippingCost
+                changeDeliveryDate(input)
             }
+
         });
     });
 }
