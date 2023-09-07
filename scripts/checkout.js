@@ -1,5 +1,11 @@
 import { products } from "../data/products.js";
-import { cart, removeFromCart, checkQuantity,updateQuantityBySave, checkCartPrice } from "../data/cart.js";
+import { cart, removeFromCart, checkQuantity, updateQuantityBySave, checkCartPrice, clearCart } from "../data/cart.js";
+
+
+const checkBoxButton = document.querySelector('.paypal-checkbox')
+const placeOrderButton = document.querySelector('.place-order-button')
+const paymentOptionsSection = document.querySelector('.payment-options')
+
 
 
 let checkoutHTML ='';
@@ -18,7 +24,6 @@ cart.forEach((cartItem)=>{
     checkoutHTML+= `
         <div class="cart-item-container js-container-${matchingItem.id}">
             <div class="delivery-date">
-            Delivery date: Tuesday, June 21
             </div>
 
             <div class="cart-item-details-grid">
@@ -111,6 +116,7 @@ cart.forEach((cartItem)=>{
 })
 
 
+
 /*function to check & return the last item in an array  */
 function isLastItem(arr, item){
     const lastIndex = arr.length - 1;
@@ -118,7 +124,12 @@ function isLastItem(arr, item){
 }
 
 if (cart.length !=0){
-    document.querySelector('.order-summary-cart-items').innerHTML= checkoutHTML
+
+    //The import command first exceutes all of the pages code so cant export orders without these checks first
+    if(document.querySelector('.order-summary-cart-items')){
+        document.querySelector('.order-summary-cart-items').innerHTML= checkoutHTML
+    }
+    
     document.querySelectorAll(`.js-delete-button`)
         .forEach((link) => {
             link.addEventListener('click', (item)=>{
@@ -128,10 +139,12 @@ if (cart.length !=0){
                 container.remove()
                 updatingPage()
                 removeShippingCost(productId)
+                
                 /*checking if its the last item on the cart to display the message after removing it*/
                 if(isLastItem(cart, item)){
                     emptyCartMessage()
                     updatingPage()
+
                 }
 
             });
@@ -140,9 +153,14 @@ if (cart.length !=0){
     emptyCartMessage()
 }
 
+
 function emptyCartMessage(){
     const emptyCart = document.querySelector('.js-cart-empty')
-    emptyCart.style.display = 'block';
+    //The import command first exceutes all of the pages code so cant export orders without these checks first
+    if(emptyCart){
+        emptyCart.style.display = 'block';
+        placeOrderButton.disabled= true;
+    }
 }
 
 
@@ -199,14 +217,34 @@ document.querySelectorAll('.delivery-option-input').forEach((input) => {
     });
 });
 
+
+let deliveryDates = JSON.parse(localStorage.getItem('deliveryDates')) || []
+
 // function to change the delivery date text for each item
 function changeDeliveryDate(input){
     const deliveryDay = input.getAttribute('data-delivery-date')
     const parentContainer = input.closest('.cart-item-container');
     if(parentContainer){
+
         const deliveryDateElement = parentContainer.querySelector('.delivery-date')
+
         if(deliveryDateElement){
+
             deliveryDateElement.innerHTML = `Delivery date: ${deliveryDay}`
+
+            const newItem = {
+                deliveryDay,
+                'Id': input.id
+            };
+            
+            //filter method to return all items except for the ones that already exists, so if input exists it gets changed to the new one
+            deliveryDates = deliveryDates.filter((date)=>{
+                return input.id.substring(8) !== date.Id.substring(8)
+            })
+
+            deliveryDates.push(newItem);
+
+            localStorage.setItem('deliveryDates',JSON.stringify(deliveryDates))
         }
     }
 }
@@ -238,7 +276,10 @@ function totalCost(){
     const formattedShippingValue = parseFloat(shippingValue) / 100;    
     const totalPriceWithShipping = (formattedShippingValue + parseFloat(totalCartPrice)).toFixed(2);
     const totalTax = (totalPriceWithShipping *0.1).toFixed(2)
-    document.querySelector('.js-total-order-cost').innerHTML = `$${(Number(totalTax) + Number(totalPriceWithShipping)).toFixed(2)}`
+    const totalOrderCost = (Number(totalTax) + Number(totalPriceWithShipping)).toFixed(2)
+    document.querySelector('.js-total-order-cost').innerHTML = `$${totalOrderCost}`
+
+    return totalOrderCost;
 }
 
 
@@ -292,43 +333,66 @@ document.querySelectorAll('.js-update-button').forEach((link)=>{
 
 
 
-const checkBoxButton = document.querySelector('.paypal-checkbox')
-const placeOrderButton = document.querySelector('.place-order-button')
-const paymentOptionsSection = document.querySelector('.payment-options')
+//The import command first exceutes all of the pages code so cant export orders without these checks first
 
-checkBoxButton.addEventListener('click', ()=>{
-    if(checkBoxButton.checked){
-        paymentOptionsSection.style.display = 'inline';
-        placeOrderButton.style.display = 'none';
-    }else{
-        paymentOptionsSection.style.display = 'none';
-        placeOrderButton.style.display = 'inline';
-    }
-    
-})
+if(checkBoxButton){
+    checkBoxButton.addEventListener('click', ()=>{
+        if(checkBoxButton.checked){
+            paymentOptionsSection.style.display = 'inline';
+            placeOrderButton.style.display = 'none';
+        }else{
+            paymentOptionsSection.style.display = 'none';
+            placeOrderButton.style.display = 'inline';
+        }
+        
+    })
+}
+
 
 
 
 /*function to update the page immediatly after actions*/
 function updatingPage(){
-    const totalCartQuantity = checkQuantity()
-    document.querySelector('.return-to-home-link').innerHTML= `${totalCartQuantity} items`
-    document.querySelector('.js-order-summary-items').innerHTML= totalCartQuantity
-    const totalCartPrice = checkCartPrice()
-    document.querySelector('.js-items-price').innerHTML = `$${totalCartPrice}`
 
-    document.querySelector('.js-shipping-price').innerHTML = `$${localStorage.getItem('shipping') /100}`
+    //The import command first exceutes all of the pages code so cant export orders without these checks first
+    
+    if(document.querySelector('.return-to-home-link') || document.querySelector('.js-order-summary-items') || document.querySelector('.js-items-price') || document.querySelector('.js-shipping-price')){
 
-    taxlessCalculationDsiplay()
-    taxCalculationDsiplay()
-    totalCost()
+
+        const totalCartQuantity = checkQuantity()
+        document.querySelector('.return-to-home-link').innerHTML= `${totalCartQuantity} items`
+        document.querySelector('.js-order-summary-items').innerHTML= totalCartQuantity
+        const totalCartPrice = checkCartPrice()
+        document.querySelector('.js-items-price').innerHTML = `$${totalCartPrice}`
+        document.querySelector('.js-shipping-price').innerHTML = `$${localStorage.getItem('shipping') /100}`
+        taxlessCalculationDsiplay()
+        taxCalculationDsiplay()
+        totalCost()
+        
+    }
+    
+    
+    
+
     
 /* restoring the saved radio option*/
     document.addEventListener('DOMContentLoaded', () => {
+// adding the delivery dates on reload
+        cart.forEach((item) => {
+            const productId = item.productId;
+            // Find the corresponding radio input with "option1"
+            const input = document.querySelector(`#option1-${productId}`);
+            if (input) {
+                // Call changeDeliveryDate to set the initial delivery date
+                changeDeliveryDate(input);
+            }
+        });
+
+
         document.querySelectorAll('.delivery-option-input').forEach((input) => {
             const { productId } = input.dataset;
             const storedOptionId = localStorage.getItem(`selected-${productId}`);
-            
+
             if (storedOptionId === input.id) {
                 input.checked = true;
                 const storedShippingCost = parseInt(input.getAttribute('data-shipping-cost'), 10);
@@ -341,3 +405,56 @@ function updatingPage(){
 }
 
 updatingPage()
+
+
+/* declaring arrays for the carts to use in orders page */
+let orders =  JSON.parse(localStorage.getItem('orders')) || []
+let orderCart = JSON.parse(localStorage.getItem('orderCart')) || []
+
+/* function to move the cart items to order page and clean the checkout page */
+document.body.addEventListener('click', (event) => {
+    
+    if (event.target.matches('.place-order-button')) {
+
+    orderCart = []
+
+    const newOrder = []
+    // adding the cart items to orderCart array 
+    cart.forEach((cartItem) => {
+        orderCart.push({
+            productId: cartItem.productId,
+            quantity: cartItem.quantity
+        });
+        // remove saved radio options
+        const productId = cartItem.productId
+        localStorage.removeItem(`selected-${productId}`)
+    });
+
+    const totalOrderCost = totalCost()
+    // declaring & adding todays date to the array with the order
+    const orderDate = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+
+    // adding orderCart with its cost and delivery dates and the day the order is made
+    orders.push({orderCart,totalOrderCost,deliveryDates,orderDate})
+
+    localStorage.setItem('orderCart' , JSON.stringify(orderCart))
+    localStorage.setItem('orders' , JSON.stringify(orders))
+
+    // Clear the cart
+    clearCart(); 
+        
+    // Clear the shipping cost and set a default value of "0.00"
+    localStorage.setItem('shipping', '0.00');
+    
+    // Clear delivery dates
+    localStorage.removeItem('deliveryDates');
+    // removing all the items from the page
+    const itemsContainer = document.querySelector('.order-summary-cart-items')
+    itemsContainer.remove()
+    updatingPage()
+    emptyCartMessage()
+    
+}
+});
+// exporting the orders array
+export { orders }

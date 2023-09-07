@@ -373,3 +373,13 @@
   margin-top: 11px;
   margin-bottom: 15px;
 }
+.place-order-button:disabled{
+  cursor: default;
+  background-color: hsl(50, 100%, 70%);
+  color: grey;
+  border: none;
+  box-shadow: none;
+}
+.place-order-link{
+  text-decoration: none;
+}

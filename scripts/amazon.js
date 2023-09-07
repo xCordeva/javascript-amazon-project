@@ -61,6 +61,8 @@ document.querySelector('.js-cart-quantity').innerHTML = storedQuantity;
 
 
 
+
+
 export function updateCartQuantity(){
     storedQuantity = checkQuantity()
     document.querySelector('.js-cart-quantity').innerHTML = storedQuantity;
