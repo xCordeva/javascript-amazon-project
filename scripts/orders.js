@@ -51,7 +51,7 @@ orders.forEach((order, orderIndex)=>{
 
             <div class="product-actions">
                 <a href="tracking.html">
-                    <button class="track-package-button button-secondary">
+                    <button class="track-package-button button-secondary" data-product-id="${matchingItem.id}">
                         Track package
                     </button>
                 </a>
@@ -104,8 +104,9 @@ function buyAgain(productId, button){
         if(currentOrderIndex !== -1){
             
             const order = orders[currentOrderIndex]
-            
+ 
             const selectedItem = order.orderCart.find((item)=> item.productId === productId)
+
             const quantity = selectedItem.quantity
 
             reAddToCart(productId, quantity)
@@ -141,10 +142,39 @@ function startIconTimeout(added, removeBuyAgain) {
 }
 
 
+// tracking button functionality
+
+let trackingItem= JSON.parse(localStorage.getItem('trackingItem')) || []
+const trackingPackageButton = document.querySelectorAll('.track-package-button')
+trackingPackageButton.forEach((button)=>{
+    button.addEventListener('click', (event)=>{
+        let trackingItem= []
+        const productId = event.currentTarget.getAttribute('data-product-id');
+        const orderContainer = button.closest('.order-container')
+        if(orderContainer){
+            const currentOrderIndex = Array.from(ordersGrid.querySelectorAll('.order-container')).indexOf(orderContainer)
+            if(currentOrderIndex !== -1){
+                
+                const order = orders[currentOrderIndex]
+
+                const selectedItem = order.orderCart.find((item)=> item.productId === productId) 
+
+                const selectedItemDeliveryDay = order.deliveryDates.find((item)=> item.Id.substring(8) === productId).deliveryDay 
+                trackingItem.push({
+                    'productId': selectedItem.productId,
+                    'quantity': selectedItem.quantity,
+                    'deliveryDay': selectedItemDeliveryDay
+                } )
+                localStorage.setItem('trackingItem',JSON.stringify(trackingItem))
+            }
+        }
+    })
+})
+
+
 // showing cart quantity in the icon 
 function iconCartQuantity(){
     const totalCartQuantity = checkQuantity()
     document.querySelector('.js-cart-quantity').innerHTML= `${totalCartQuantity}`
 }
 iconCartQuantity()
-
