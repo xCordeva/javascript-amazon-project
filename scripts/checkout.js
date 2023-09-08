@@ -6,7 +6,16 @@ const checkBoxButton = document.querySelector('.paypal-checkbox')
 const placeOrderButton = document.querySelector('.place-order-button')
 const paymentOptionsSection = document.querySelector('.payment-options')
 
+const option1Date= new Date().setDate(new Date().getDate() + 3)
+const option2Date= new Date().setDate(new Date().getDate() + 5)
+const option3Date= new Date().setDate(new Date().getDate() + 11)
 
+const deliveryOption1 = new Date(option1Date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+const deliveryOption2 = new Date(option2Date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+const deliveryOption3 = new Date(option3Date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+console.log(deliveryOption1)
+console.log(deliveryOption2)
+console.log(deliveryOption3)
 
 let checkoutHTML ='';
 
@@ -65,10 +74,10 @@ cart.forEach((cartItem)=>{
                     id="option1-${matchingItem.id}"
                     data-shipping-cost="0"
                     data-product-id="${matchingItem.id}"
-                    data-delivery-date="Tuesday, June 21">
+                    data-delivery-date="${deliveryOption3}">
                 <div>
                     <div class="delivery-option-date">
-                    Tuesday, June 21
+                    ${deliveryOption3}
                     </div>
                     <div class="delivery-option-price">
                     FREE Shipping
@@ -82,10 +91,10 @@ cart.forEach((cartItem)=>{
                     id="option2-${matchingItem.id}"
                     data-shipping-cost="499"
                     data-product-id="${matchingItem.id}"
-                    data-delivery-date="Wednesday, June 15">
+                    data-delivery-date="${deliveryOption2}">
                 <div>
                     <div class="delivery-option-date">
-                    Wednesday, June 15
+                    ${deliveryOption2}
                     </div>
                     <div class="delivery-option-price">
                     $4.99 - Shipping
@@ -99,10 +108,10 @@ cart.forEach((cartItem)=>{
                     id="option3-${matchingItem.id}"
                     data-shipping-cost="999"
                     data-product-id="${matchingItem.id}"
-                    data-delivery-date="Monday, June 13">
+                    data-delivery-date="${deliveryOption1}">
                 <div>
                     <div class="delivery-option-date">
-                    Monday, June 13
+                    ${deliveryOption1}
                     </div>
                     <div class="delivery-option-price">
                     $9.99 - Shipping
