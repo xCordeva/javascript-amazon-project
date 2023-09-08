@@ -6,7 +6,7 @@ let productsHTML= '';
 
 products.forEach((product)=>{
     productsHTML += `
-        <div class="product-container">
+        <div class="product-container" data-product-id="${product.id}">
             <div class="product-image-container">
             <img class="product-image"
                 src="${product.image}">
@@ -60,16 +60,11 @@ let storedQuantity = parseInt(localStorage.getItem('cartNum'))
 document.querySelector('.js-cart-quantity').innerHTML = storedQuantity;
 
 
-
-
-
 export function updateCartQuantity(){
     storedQuantity = checkQuantity()
     document.querySelector('.js-cart-quantity').innerHTML = storedQuantity;
     return storedQuantity;
 }
-
-
 
 
 function startIconTimeout(addedIcon){
@@ -81,9 +76,8 @@ function startIconTimeout(addedIcon){
     }, 1000)
 } 
 
+
 let addedIconTimeId;
-
-
 
 document.querySelector('.js-product-grid').innerHTML= productsHTML;
 
@@ -100,3 +94,53 @@ document.querySelectorAll('.js-add-cart').forEach((button)=>{
         checkCartPrice(productId)
     })
 })
+
+
+let searchInput = document.querySelector('.search-bar');
+const searchButton = document.querySelector('.search-button');
+
+// search when the search icon is clicked
+searchButton.addEventListener('click', ()=>{
+    search()
+});
+// search when enter key is clicked
+searchInput.addEventListener('keydown', (event)=>{
+    if(event.key === 'Enter'){
+        search()
+    }
+});
+// search when any key is typed in search bar this option makes the other two options useless now
+searchInput.addEventListener('input', ()=>{
+    search()
+});
+
+// function to perform the search by hiding all items that doesnt match the user search phrases
+function search(){
+    const searchPhrase = searchInput.value.trim().toLowerCase();
+
+    //array to store product IDs that match the search phrase
+    const matchingProductIds = [];
+
+    products.forEach((product)=>{
+      // Ensure product.keywords is defined and an array before using filter
+      if(Array.isArray(product.keywords)){
+        const matchingKeywords = product.keywords.filter((item)=>    item.toLowerCase().includes(searchPhrase)
+        );
+
+        if(matchingKeywords.length > 0){
+            matchingProductIds.push(product.id);
+        }
+      }
+    });
+
+    // hide or show elements based on the matching IDs
+    document.querySelectorAll('.product-container').forEach((element)=> {
+      const productId = element.getAttribute('data-product-id');
+
+      if(matchingProductIds.includes(productId)){
+        element.classList.remove('hide-item');
+      }else{
+        element.classList.add('hide-item');
+      }
+    });
+}
