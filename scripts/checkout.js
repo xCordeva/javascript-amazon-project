@@ -13,9 +13,7 @@ const option3Date= new Date().setDate(new Date().getDate() + 11)
 const deliveryOption1 = new Date(option1Date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 const deliveryOption2 = new Date(option2Date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 const deliveryOption3 = new Date(option3Date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-console.log(deliveryOption1)
-console.log(deliveryOption2)
-console.log(deliveryOption3)
+
 
 let checkoutHTML ='';
 
@@ -293,7 +291,7 @@ function totalCost(){
 
 
 document.querySelectorAll('.js-update-button').forEach((link)=>{
-    link.addEventListener('click', ()=>{
+    link.addEventListener('click', (item)=>{
         const {productId} = link.dataset
         const saveButton = document.querySelector(`.js-save-button-${productId}`)
         const newQuantity = document.querySelector(`.js-quantity-button-${productId}`)
@@ -308,21 +306,33 @@ document.querySelectorAll('.js-update-button').forEach((link)=>{
         saveButton.addEventListener('click', ()=>{
             
             const newQuantityValue = Number(newQuantity.value)
-            if (newQuantityValue <=0){
-                alert('Quantity is not Valid, please choose a number above 0');
-                return;
-            }
+
             updateQuantityBySave(productId, newQuantityValue)
             quantitySpan.innerHTML = `${newQuantityValue}`
             updateButton.style.display = 'inline';
             quantitySpan.style.display = 'inline';
             saveButton.style.display = 'none';
             newQuantity.style.display = 'none';
+
+            // if user chose 0 the item gets deleted
+            if (newQuantityValue <=0){
+                removeFromCart(productId)
+                const container = document.querySelector(`.js-container-${productId}`)
+                container.remove()
+                updatingPage()
+                removeShippingCost(productId)
+                if(isLastItem(cart, item)){
+                    emptyCartMessage()
+                    updatingPage()
+                }
+            }
+            
                        
             updatingPage()
         })
         const handleEnterKey = (event) => {
             if (event.key === 'Enter') {
+                
                 const newQuantityValue = Number(newQuantity.value);
                 updateQuantityBySave(productId, newQuantityValue);
                 quantitySpan.innerHTML = `${newQuantityValue}`;
@@ -332,6 +342,18 @@ document.querySelectorAll('.js-update-button').forEach((link)=>{
                 newQuantity.style.display = 'none';
                 document.removeEventListener('keydown', handleEnterKey);
                 
+                // if user chose 0 the item gets deleted
+                if (newQuantityValue <=0){
+                    removeFromCart(productId)
+                    const container = document.querySelector(`.js-container-${productId}`)
+                    container.remove()
+                    updatingPage()
+                    removeShippingCost(productId)
+                    if(isLastItem(cart, item)){
+                        emptyCartMessage()
+                        updatingPage()
+                    }
+                }
                 updatingPage()
             }
         };
