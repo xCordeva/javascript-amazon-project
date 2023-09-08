@@ -124,10 +124,12 @@ function search(){
     products.forEach((product)=>{
       // Ensure product.keywords is defined and an array before using filter
       if(Array.isArray(product.keywords)){
-        const matchingKeywords = product.keywords.filter((item)=>    item.toLowerCase().includes(searchPhrase)
-        );
-
-        if(matchingKeywords.length > 0){
+        // search by keywords of a product
+        const matchingKeywords = product.keywords.filter((item)=>    item.toLowerCase().includes(searchPhrase))
+        // search by name of a product
+        const matchingName = product.name.toLowerCase().includes(searchPhrase)
+        
+        if(matchingKeywords.length > 0 || matchingName){
             matchingProductIds.push(product.id);
         }
       }
