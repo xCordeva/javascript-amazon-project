@@ -1,11 +1,12 @@
 import { products } from "../data/products.js";
-import { checkQuantity } from "../data/cart.js";
+import { checkQuantity,reAddToCart } from "../data/cart.js";
 import { orders } from "./checkout.js";
 
 
 const ordersGrid = document.querySelector('.orders-grid');
 
-orders.forEach((order)=>{
+
+orders.forEach((order, orderIndex)=>{
 
   const orderHTML = [];
 
@@ -37,9 +38,14 @@ orders.forEach((order)=>{
                 <div class="product-quantity">
                     Quantity: ${cartItem.quantity}
                 </div>
-                <button class="buy-again-button button-primary">
-                    <img class="buy-again-icon" src="images/icons/buy-again.png">
-                    <span class="buy-again-message">Buy it again</span>
+                <button class="buy-again-button button-primary" data-product-id="${matchingItem.id}">
+                    <div class="buy-again js-buy-again">
+                        <img class="buy-again-icon" src="images/icons/buy-again.png">
+                        <span class="buy-again-message">Buy it again</span>
+                    </div>
+                    <span class="buy-again-success js-buy-again-success">
+                        ✓ Added
+                    </span>
                 </button>
             </div>
 
@@ -79,7 +85,66 @@ orders.forEach((order)=>{
     ordersGrid.innerHTML += orderHeaderHTML +`<div class="order-details-grid">` +  orderHTML.join('') + `</div>` +`</div>`
 })
 
+
+const buyAgainButton = document.querySelectorAll('.buy-again-button')
+buyAgainButton.forEach((button)=>{
+    button.addEventListener('click', (event)=>{
+
+        const productId = event.currentTarget.getAttribute('data-product-id');
+        buyAgain(productId, button)
+
+    })
+})
+
+
+function buyAgain(productId, button){
+    const orderContainer = button.closest('.order-container')
+    if(orderContainer){
+        const currentOrderIndex = Array.from(ordersGrid.querySelectorAll('.order-container')).indexOf(orderContainer)
+        if(currentOrderIndex !== -1){
+            
+            const order = orders[currentOrderIndex]
+            
+            const selectedItem = order.orderCart.find((item)=> item.productId === productId)
+            const quantity = selectedItem.quantity
+
+            reAddToCart(productId, quantity)
+
+            addIcon(button)
+
+            //Update the cart quantity after adding buyAgain action
+            iconCartQuantity()
+        }
+    }
+}
+
+// function to change text on button from buy again to added when an item is clicked
+
+function addIcon(button) {
+    const removeBuyAgain = button.querySelector('.js-buy-again');
+    const added = button.querySelector('.js-buy-again-success');
+    added.style.display = 'block';
+    removeBuyAgain.style.display = 'none';
+    startIconTimeout(added, removeBuyAgain);
+}
+
+// a seprate function to restart the timer every time the button is clicked
+let addedIconTimeId;
+function startIconTimeout(added, removeBuyAgain) {
+    clearTimeout(addedIconTimeId);
+    added.style.display = 'block';
+    removeBuyAgain.style.display = 'none';
+    addedIconTimeId = setTimeout(() => {
+        added.style.display = 'none';
+        removeBuyAgain.style.display = 'flex';
+    }, 1000);
+}
+
+
 // showing cart quantity in the icon 
-const totalCartQuantity = checkQuantity()
-document.querySelector('.js-cart-quantity').innerHTML= `${totalCartQuantity}`
+function iconCartQuantity(){
+    const totalCartQuantity = checkQuantity()
+    document.querySelector('.js-cart-quantity').innerHTML= `${totalCartQuantity}`
+}
+iconCartQuantity()
 

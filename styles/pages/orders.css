@@ -218,3 +218,13 @@
     padding: 12px;
   }
 }
+
+
+.buy-again{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.buy-again-success{
+  display: none;
+}

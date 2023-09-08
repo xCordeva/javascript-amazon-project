@@ -31,6 +31,24 @@ export function addToCart(productId){
         
 }
 
+export function reAddToCart(productId, quantity){
+    let matchingItem;
+
+        cart.forEach((item)=>{
+            if(productId === item.productId){
+                matchingItem = item;
+            }
+        }) 
+        if (matchingItem){
+            matchingItem.quantity += quantity
+        }else {
+            cart.push({
+                productId,
+                quantity
+            })
+        }saveToStorage() 
+}
+
 export function checkQuantity(){
     let totalCartQuantity=0;
     cart.forEach((item)=>{
