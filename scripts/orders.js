@@ -5,6 +5,12 @@ import { orders } from "./checkout.js";
 
 const ordersGrid = document.querySelector('.orders-grid');
 
+// show a message when there are no orders
+const emptyOrders = document.querySelector('.js-order-empty')
+console.log(emptyOrders)
+if (orders.length === 0){
+    emptyOrders.style.display = 'block';
+}
 
 orders.forEach((order, orderIndex)=>{
 
