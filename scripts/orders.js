@@ -163,8 +163,10 @@ trackingPackageButton.forEach((button)=>{
                 trackingItem.push({
                     'productId': selectedItem.productId,
                     'quantity': selectedItem.quantity,
-                    'deliveryDay': selectedItemDeliveryDay
+                    'deliveryDay': selectedItemDeliveryDay,
+                    'orderDate': order.orderDate
                 } )
+
                 localStorage.setItem('trackingItem',JSON.stringify(trackingItem))
             }
         }
