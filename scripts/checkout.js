@@ -270,7 +270,7 @@ function taxlessCalculationDsiplay(){
 /* function to calculate and show the total including tax*/
 function taxCalculationDsiplay(){
     const totalCartPrice = checkCartPrice()
-    const shippingValue = localStorage.getItem('shipping');
+    const shippingValue = localStorage.getItem('shipping') || 0;
     const formattedShippingValue = parseFloat(shippingValue) / 100;    
     const totalPriceWithShipping = (formattedShippingValue + parseFloat(totalCartPrice)).toFixed(2);
     const totalTax = (totalPriceWithShipping *0.1).toFixed(2)
@@ -279,7 +279,7 @@ function taxCalculationDsiplay(){
 /* function to calculate and show the order's total cost*/
 function totalCost(){
     const totalCartPrice = checkCartPrice()
-    const shippingValue = localStorage.getItem('shipping');
+    const shippingValue = localStorage.getItem('shipping') || 0;
     const formattedShippingValue = parseFloat(shippingValue) / 100;    
     const totalPriceWithShipping = (formattedShippingValue + parseFloat(totalCartPrice)).toFixed(2);
     const totalTax = (totalPriceWithShipping *0.1).toFixed(2)
