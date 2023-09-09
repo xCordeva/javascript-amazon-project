@@ -261,7 +261,7 @@ function changeDeliveryDate(input){
 /* function to calculate and show the total without tax*/
 function taxlessCalculationDsiplay(){
     const totalCartPrice = checkCartPrice()
-    const shippingValue = localStorage.getItem('shipping');
+    const shippingValue = localStorage.getItem('shipping') || 0;
     const formattedShippingValue = parseFloat(shippingValue) / 100;    
     const totalPriceWithShipping = (formattedShippingValue + parseFloat(totalCartPrice)).toFixed(2);
     document.querySelector('.js-total-before-tax').innerHTML = `$${totalPriceWithShipping}`

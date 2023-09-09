@@ -56,7 +56,7 @@ products.forEach((product)=>{
         </div>`
 })
 
-let storedQuantity = parseInt(localStorage.getItem('cartNum'))
+let storedQuantity = parseInt(localStorage.getItem('cartNum')) || 0
 document.querySelector('.js-cart-quantity').innerHTML = storedQuantity;
 
 
