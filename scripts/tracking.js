@@ -1,5 +1,5 @@
 import { products } from "../data/products.js";
-import { checkQuantity } from "../data/cart.js";
+import { checkQuantity } from "./cart.js";
 
 const trackingItem = JSON.parse(localStorage.getItem('trackingItem'))
 

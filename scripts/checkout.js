@@ -1,5 +1,5 @@
 import { products } from "../data/products.js";
-import { cart, removeFromCart, checkQuantity, updateQuantityBySave, checkCartPrice, clearCart } from "../data/cart.js";
+import { cart, removeFromCart, checkQuantity, updateQuantityBySave, checkCartPrice, clearCart } from "./cart.js";
 
 
 const checkBoxButton = document.querySelector('.paypal-checkbox')

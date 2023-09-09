@@ -1,5 +1,5 @@
 import { products } from "../data/products.js";
-import { checkQuantity,reAddToCart } from "../data/cart.js";
+import { checkQuantity,reAddToCart } from "./cart.js";
 import { orders } from "./checkout.js";
 
 
