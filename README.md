@@ -71,7 +71,7 @@ To run the project locally, follow these steps:
    cd javascript-amazon-project
    ```
 
-3. Open the `amazon.html` file in your preferred web browser to start using the application.
+3. Open the `index.html` file in your preferred web browser to start using the application.
 
 
 ## Usage
