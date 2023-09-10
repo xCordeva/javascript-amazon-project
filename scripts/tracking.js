@@ -72,7 +72,12 @@ const progressPercentage = ((totalDaysToDelivery - daysUntilDelivery) / totalDay
 if(progressPercentage === 0){
 
     progressBar.style.width = `10%`
+    
+}
+else if(progressPercentage >= 0 && progressPercentage < 50){
 
+    progressBar.style.width = `${progressPercentage}%`
+    
 }
 else if(progressPercentage >= 50 && progressPercentage < 100){
 
