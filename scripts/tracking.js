@@ -86,7 +86,7 @@ else if(progressPercentage >= 50 && progressPercentage < 100){
     progressBar.style.width = `${progressPercentage}%`
 
 }
-else if(progressPercentage === 100){
+else if(progressPercentage === 100 || progressPercentage > 100){
 
     preparingStatus.classList.remove('current-status')
     shippedStatus.classList.remove('current-status')
@@ -94,3 +94,4 @@ else if(progressPercentage === 100){
     progressBar.style.width = `${progressPercentage}%`
 
 }
+console.log(progressPercentage)
